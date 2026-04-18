@@ -337,7 +337,7 @@
             // 
             // btnMigrateSettings
             // 
-            this.btnMigrateSettings.Location = new System.Drawing.Point(11, 535);
+            this.btnMigrateSettings.Location = new System.Drawing.Point(11, 548);
             this.btnMigrateSettings.Name = "btnMigrateSettings";
             this.btnMigrateSettings.Size = new System.Drawing.Size(191, 28);
             this.btnMigrateSettings.TabIndex = 39;
@@ -348,7 +348,7 @@
             // chkUseKpxcSettingsKey
             // 
             this.chkUseKpxcSettingsKey.AutoSize = true;
-            this.chkUseKpxcSettingsKey.Location = new System.Drawing.Point(11, 512);
+            this.chkUseKpxcSettingsKey.Location = new System.Drawing.Point(11, 525);
             this.chkUseKpxcSettingsKey.Name = "chkUseKpxcSettingsKey";
             this.chkUseKpxcSettingsKey.Size = new System.Drawing.Size(166, 17);
             this.chkUseKpxcSettingsKey.TabIndex = 38;
@@ -358,7 +358,7 @@
             // btnCheckForLegacyConfig
             // 
             this.btnCheckForLegacyConfig.Anchor = ((System.Windows.Forms.AnchorStyles) (((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnCheckForLegacyConfig.Location = new System.Drawing.Point(208, 535);
+            this.btnCheckForLegacyConfig.Location = new System.Drawing.Point(208, 548);
             this.btnCheckForLegacyConfig.Name = "btnCheckForLegacyConfig";
             this.btnCheckForLegacyConfig.Size = new System.Drawing.Size(186, 28);
             this.btnCheckForLegacyConfig.TabIndex = 37;
@@ -389,7 +389,7 @@
             // label6
             // 
             this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(7, 453);
+            this.label6.Location = new System.Drawing.Point(7, 466);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(296, 26);
             this.label6.TabIndex = 35;
@@ -399,7 +399,7 @@
             // 
             this.comboBoxDatabases.DisplayMember = "Id";
             this.comboBoxDatabases.FormattingEnabled = true;
-            this.comboBoxDatabases.Location = new System.Drawing.Point(42, 482);
+            this.comboBoxDatabases.Location = new System.Drawing.Point(42, 495);
             this.comboBoxDatabases.Name = "comboBoxDatabases";
             this.comboBoxDatabases.Size = new System.Drawing.Size(250, 21);
             this.comboBoxDatabases.TabIndex = 34;
@@ -407,7 +407,7 @@
             // 
             // txtKPXCVerOverride
             // 
-            this.txtKPXCVerOverride.Location = new System.Drawing.Point(161, 422);
+            this.txtKPXCVerOverride.Location = new System.Drawing.Point(161, 435);
             this.txtKPXCVerOverride.Name = "txtKPXCVerOverride";
             this.txtKPXCVerOverride.Size = new System.Drawing.Size(100, 20);
             this.txtKPXCVerOverride.TabIndex = 33;
@@ -415,7 +415,7 @@
             // label5
             // 
             this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(8, 425);
+            this.label5.Location = new System.Drawing.Point(8, 438);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(147, 13);
             this.label5.TabIndex = 32;
@@ -425,7 +425,7 @@
             // 
             this.comboBoxPasswordProfiles.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBoxPasswordProfiles.FormattingEnabled = true;
-            this.comboBoxPasswordProfiles.Location = new System.Drawing.Point(42, 368);
+            this.comboBoxPasswordProfiles.Location = new System.Drawing.Point(42, 381);
             this.comboBoxPasswordProfiles.Name = "comboBoxPasswordProfiles";
             this.comboBoxPasswordProfiles.Size = new System.Drawing.Size(250, 21);
             this.comboBoxPasswordProfiles.TabIndex = 44;
@@ -433,7 +433,7 @@
             // label7
             // 
             this.label7.AutoSize = true;
-            this.label7.Location = new System.Drawing.Point(8, 352);
+            this.label7.Location = new System.Drawing.Point(8, 365);
             this.label7.Name = "label7";
             this.label7.Size = new System.Drawing.Size(142, 13);
             this.label7.TabIndex = 43;
@@ -442,7 +442,7 @@
             // returnStringFieldsWithKphOnlyCheckBox
             // 
             this.returnStringFieldsWithKphOnlyCheckBox.AutoSize = true;
-            this.returnStringFieldsWithKphOnlyCheckBox.Location = new System.Drawing.Point(55, 288);
+            this.returnStringFieldsWithKphOnlyCheckBox.Location = new System.Drawing.Point(55, 301);
             this.returnStringFieldsWithKphOnlyCheckBox.Name = "returnStringFieldsWithKphOnlyCheckBox";
             this.returnStringFieldsWithKphOnlyCheckBox.Size = new System.Drawing.Size(300, 30);
             this.returnStringFieldsWithKphOnlyCheckBox.TabIndex = 31;
@@ -453,7 +453,7 @@
             // 
             this.label4.AutoSize = true;
             this.label4.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
-            this.label4.Location = new System.Drawing.Point(52, 321);
+            this.label4.Location = new System.Drawing.Point(52, 334);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(277, 26);
             this.label4.TabIndex = 22;
@@ -461,7 +461,7 @@
             // 
             // label3
             // 
-            this.label3.Location = new System.Drawing.Point(39, 245);
+            this.label3.Location = new System.Drawing.Point(39, 258);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(355, 46);
             this.label3.TabIndex = 21;
@@ -470,7 +470,7 @@
             // returnStringFieldsCheckbox
             // 
             this.returnStringFieldsCheckbox.AutoSize = true;
-            this.returnStringFieldsCheckbox.Location = new System.Drawing.Point(11, 225);
+            this.returnStringFieldsCheckbox.Location = new System.Drawing.Point(11, 238);
             this.returnStringFieldsCheckbox.Name = "returnStringFieldsCheckbox";
             this.returnStringFieldsCheckbox.Size = new System.Drawing.Size(186, 17);
             this.returnStringFieldsCheckbox.TabIndex = 20;

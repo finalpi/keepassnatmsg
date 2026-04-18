@@ -197,7 +197,7 @@ namespace KeePassNatMsg.Protocol
         {
             var resp = req.GetResponse();
             var msg = resp.Message;
-            msg.Add("entries", new JArray(_ext.GeneratePassword()));
+            msg.Add("password", _ext.GeneratePassword());
             return resp;
         }
 

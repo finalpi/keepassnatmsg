@@ -1,4 +1,5 @@
 ﻿using KeePassLib;
+using KeePassLib.Cryptography.PasswordGenerator;
 using KeePassNatMsg.NativeMessaging;
 using KeePassNatMsg.Utils;
 using System;
@@ -11,6 +12,18 @@ namespace KeePassNatMsg.Options
 {
     public partial class OptionsForm : Form
     {
+        private sealed class PasswordGeneratorProfileOption
+        {
+            public string Display { get; set; }
+            public string Value { get; set; }
+
+            public override string ToString()
+            {
+                return Display;
+            }
+        }
+
+        private const string DefaultPasswordGeneratorProfileLabel = "(Default) Automatically generated passwords for new entries";
         readonly ConfigOpt _config;
         private bool _restartRequired = false;
         private readonly NativeMessagingHost _host;
@@ -65,12 +78,14 @@ namespace KeePassNatMsg.Options
             SortByTitleRadioButton.Checked = !_config.SortResultByUsername;
             txtKPXCVerOverride.Text = _config.OverrideKeePassXcVersion;
             chkSearchUrls.Checked = _config.SearchUrls;
+            chkStrictHostAndPortMatching.Checked = _config.StrictHostAndPortMatching;
             chkUseKpxcSettingsKey.Checked = _config.UseKeePassXcSettings;
             chkUseLegacyHostMatching.Checked = _config.UseLegacyHostMatching;
 
             this.returnStringFieldsCheckbox_CheckedChanged(null, EventArgs.Empty);
 
             InitDatabasesDropdown();
+            InitPasswordProfilesDropdown();
             foreach (DatabaseItem item in comboBoxSearchDatabases.Items)
             {
                 if (item.DbHash == _config.SearchDatabaseHash)
@@ -103,7 +118,9 @@ namespace KeePassNatMsg.Options
             _config.OverrideKeePassXcVersion = txtKPXCVerOverride.Text;
             _config.ConnectionDatabaseHash = (comboBoxDatabases.SelectedItem as DatabaseItem) == null ? null : (comboBoxDatabases.SelectedItem as DatabaseItem).DbHash;
             _config.SearchUrls = chkSearchUrls.Checked;
+            _config.StrictHostAndPortMatching = chkStrictHostAndPortMatching.Checked;
             _config.UseLegacyHostMatching = chkUseLegacyHostMatching.Checked;
+            _config.PasswordGeneratorProfileName = GetSelectedPasswordProfileName();
 
             if (_config.UseKeePassXcSettings != chkUseKpxcSettingsKey.Checked)
             {
@@ -315,6 +332,60 @@ namespace KeePassNatMsg.Options
                 comboBoxSearchDatabases.Items.Add(new DatabaseItem { Id = dbIdentifier, DbHash = KeePassNatMsgExt.ExtInstance.GetDbHash(item.Database) });
                 comboBoxDatabases.Items.Add(new DatabaseItem { Id = dbIdentifier, DbHash = KeePassNatMsgExt.ExtInstance.GetDbHash(item.Database) });
             }
+        }
+
+        private void InitPasswordProfilesDropdown()
+        {
+            comboBoxPasswordProfiles.Items.Clear();
+            comboBoxPasswordProfiles.Items.Add(new PasswordGeneratorProfileOption
+            {
+                Display = DefaultPasswordGeneratorProfileLabel,
+                Value = string.Empty
+            });
+
+            foreach (var profileName in KeePass.Util.PwGeneratorUtil.GetAllProfiles(true)
+                .Select(p => p.Name)
+                .Where(n => !string.IsNullOrWhiteSpace(n))
+                .Distinct())
+            {
+                comboBoxPasswordProfiles.Items.Add(new PasswordGeneratorProfileOption
+                {
+                    Display = profileName,
+                    Value = profileName
+                });
+            }
+
+            var configuredProfileName = _config.PasswordGeneratorProfileName;
+            PasswordGeneratorProfileOption selectedProfile;
+
+            if (string.IsNullOrWhiteSpace(configuredProfileName))
+            {
+                selectedProfile = comboBoxPasswordProfiles.Items[0] as PasswordGeneratorProfileOption;
+            }
+            else
+            {
+                selectedProfile = comboBoxPasswordProfiles.Items
+                    .OfType<PasswordGeneratorProfileOption>()
+                    .FirstOrDefault(p => string.Equals(p.Value, configuredProfileName, StringComparison.Ordinal));
+
+                if (selectedProfile == null)
+                {
+                    selectedProfile = new PasswordGeneratorProfileOption
+                    {
+                        Display = configuredProfileName + " (missing)",
+                        Value = configuredProfileName
+                    };
+                    comboBoxPasswordProfiles.Items.Add(selectedProfile);
+                }
+            }
+
+            comboBoxPasswordProfiles.SelectedItem = selectedProfile;
+        }
+
+        private string GetSelectedPasswordProfileName()
+        {
+            var selectedProfile = comboBoxPasswordProfiles.SelectedItem as PasswordGeneratorProfileOption;
+            return selectedProfile == null ? string.Empty : selectedProfile.Value;
         }
 
         private void LoadDatabaseKeys()

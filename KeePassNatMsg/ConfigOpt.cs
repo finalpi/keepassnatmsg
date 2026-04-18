@@ -33,6 +33,7 @@ namespace KeePassNatMsg
         const string UseKeePassXcSettingsKey = "KeePassNatMsg_UseKpxcSettings";
         private const string UseLegacyHostMatchingKey = "KeePassNatMsg_UseLegacyHostMatching";
         private const string PasswordGeneratorProfileNameKey = "KeePassNatMsg_PasswordGeneratorProfileName";
+        private const string StrictHostAndPortMatchingKey = "KeePassNatMsg_StrictHostAndPortMatching";
 
 		public ConfigOpt(AceCustomConfig config)
         {
@@ -169,6 +170,12 @@ namespace KeePassNatMsg
         {
             get { return _config.GetString(PasswordGeneratorProfileNameKey, string.Empty); }
             set { _config.SetString(PasswordGeneratorProfileNameKey, value); }
+        }
+
+        public bool StrictHostAndPortMatching
+        {
+            get { return _config.GetBool(StrictHostAndPortMatchingKey, false); }
+            set { _config.SetBool(StrictHostAndPortMatchingKey, value); }
         }
     }
 }

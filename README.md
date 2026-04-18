@@ -119,6 +119,9 @@ The options dialog will appear:
 18. Select a KeePass password generator profile for browser-generated passwords.
   - Leave it at the default option to use KeePass' standard "Automatically generated passwords for new entries" profile.
   - Choose any custom KeePass password generator profile to make KeePassXC-Browser use that profile when requesting a new password.
+19. Strictly match host and port when searching.
+  - When enabled, KeePassNatMsg matches entries using the full `host:port` authority instead of the host name only.
+  - This disables the looser fallback matching behavior and is useful when the same host serves different credentials on different ports.
 
 ### Password generator compatibility
 
@@ -133,6 +136,17 @@ Each backup entry:
 * uses the generated password as the KeePass password field
 * is titled `KeePassNatMsg generated password at: yyyy/M/d H:mm:ss`
 * is intended as a recovery copy in case the generated password is not saved elsewhere
+
+### Strict host and port matching
+
+By default, KeePassNatMsg keeps its historical host-based matching behavior for compatibility.
+
+If you enable `Strictly match host and port when searching` in the Advanced tab, KeePassNatMsg will:
+* match entries against the full request authority (`host:port`)
+* stop using broader host-only fallback matching
+* stop using title-based substring fallback matching for login discovery
+
+This is useful for setups where multiple services share the same host name but listen on different ports.
 
 ![KeePassNatMsg Options Keys](documentation/images/options-keys.png)
 

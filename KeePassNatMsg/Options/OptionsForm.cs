@@ -78,6 +78,7 @@ namespace KeePassNatMsg.Options
             SortByTitleRadioButton.Checked = !_config.SortResultByUsername;
             txtKPXCVerOverride.Text = _config.OverrideKeePassXcVersion;
             chkSearchUrls.Checked = _config.SearchUrls;
+            chkStrictHostAndPortMatching.Checked = _config.StrictHostAndPortMatching;
             chkUseKpxcSettingsKey.Checked = _config.UseKeePassXcSettings;
             chkUseLegacyHostMatching.Checked = _config.UseLegacyHostMatching;
 
@@ -117,6 +118,7 @@ namespace KeePassNatMsg.Options
             _config.OverrideKeePassXcVersion = txtKPXCVerOverride.Text;
             _config.ConnectionDatabaseHash = (comboBoxDatabases.SelectedItem as DatabaseItem) == null ? null : (comboBoxDatabases.SelectedItem as DatabaseItem).DbHash;
             _config.SearchUrls = chkSearchUrls.Checked;
+            _config.StrictHostAndPortMatching = chkStrictHostAndPortMatching.Checked;
             _config.UseLegacyHostMatching = chkUseLegacyHostMatching.Checked;
             _config.PasswordGeneratorProfileName = GetSelectedPasswordProfileName();
 

@@ -15,6 +15,9 @@ This plugin is primarily intended for use with the [keepassxc-browser](https://g
 ## Features
  * returns all matching entries for a given URL
  * updates entries
+ * supports KeePassXC-Browser password generation requests
+ * lets you choose which KeePass password generator profile is used for browser-generated passwords
+ * stores generated passwords in a dedicated backup group to avoid losing them accidentally
  * secure exchange of entries
  * notifies user if entries are delivered
  * user can allow or deny access to single entries
@@ -67,6 +70,7 @@ KeePassNatMsg works out-of-the-box. You don't have to explicitly configure it.
 
  * KeePassNatMsg stores shared public keys in "KeePassNatMsg Settings" in the root group of a password database.
  * Password entries saved by KeePassNatMsg are stored in a new group named "KeePassNatMsg Passwords" within the password database.
+ * Passwords generated through KeePassXC-Browser can be backed up automatically in a separate group named "KeePassNatMsg Generated Passwords".
  * Remembered Allow/Deny settings are stored as JSON in custom string fields within the individual password entry in the database.
 
 ### Settings in KeePassNatMsg options.
@@ -112,6 +116,23 @@ The options dialog will appear:
   - ***It is strongly recommended that you make a backup of your database before using the Migrate Settings and Check for Legacy Config buttons.***
   - Migrate Settings: will migrate settings between KeePassNatMsg and KeePassXC.
   - Check for Legacy Config: will check to see if any legacy config exists in the current database, and migrate it to the new CustomData format.
+18. Select a KeePass password generator profile for browser-generated passwords.
+  - Leave it at the default option to use KeePass' standard "Automatically generated passwords for new entries" profile.
+  - Choose any custom KeePass password generator profile to make KeePassXC-Browser use that profile when requesting a new password.
+
+### Password generator compatibility
+
+KeePassNatMsg now implements the `generate-password` action expected by KeePassXC-Browser.
+Generated passwords are produced by KeePass itself using the selected KeePass password generator profile, so browser-generated passwords follow the same rules that you have configured in KeePass.
+
+### Generated password backups
+
+When KeePassXC-Browser requests a generated password, KeePassNatMsg also stores a backup entry in the `KeePassNatMsg Generated Passwords` group.
+
+Each backup entry:
+* uses the generated password as the KeePass password field
+* is titled `KeePassNatMsg generated password at: yyyy/M/d H:mm:ss`
+* is intended as a recovery copy in case the generated password is not saved elsewhere
 
 ![KeePassNatMsg Options Keys](documentation/images/options-keys.png)
 

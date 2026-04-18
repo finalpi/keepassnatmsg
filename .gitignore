@@ -14,3 +14,4 @@ create-plgx.bat
 build/
 .idea/
 *.DotSettings.user
+*.plgx

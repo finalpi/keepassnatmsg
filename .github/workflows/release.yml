@@ -5,33 +5,37 @@ on:
     tags:
       - "v*.*.*"
 
+permissions:
+  contents: write
+
 jobs:
   build:
-    runs-on: 'windows-2019'
+    runs-on: windows-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
-      - name: Get tag
-        id: tag
-        uses: devops-actions/action-get-tag@v1.0.1
+        uses: actions/checkout@v4
       - id: dlkp
         name: Download Keepass
         uses: smorks/keepass-download-action@v0.0.5
       - name: Add msbuild to PATH
-        uses: microsoft/setup-msbuild@v1
+        uses: microsoft/setup-msbuild@v2
       - name: Extract KeePass and Build
+        shell: pwsh
         run: |
           mkdir build
           7z x -o"build" ${{ steps.dlkp.outputs.filename }} KeePass.exe
+          $tag = "${{ github.ref_name }}"
           $ainfo = "KeePassNatMsg\Properties\AssemblyInfo.cs"
-          $content = (Get-Content -Path $ainfo) -replace '\[assembly: AssemblyVersion\("([\d.]+?)"\)\]', ('[assembly: AssemblyVersion("' + "${{ steps.tag.outputs.tag }}".substring(1) + '")]')
+          $content = (Get-Content -Path $ainfo) -replace '\[assembly: AssemblyVersion\("([\d.]+?)"\)\]', ('[assembly: AssemblyVersion("' + $tag.substring(1) + '")]')
           $content | Set-Content -Path $ainfo
           msbuild /p:Configuration=Release
       - name: Prepare Release
+        shell: pwsh
         run: |
+          $tag = "${{ github.ref_name }}"
           cp -Recurse KeePassNatMsg\bin\Release\ build\
           mv build\Release build\KeePassNatMsg
-          $zip = 'KeePassNatMsg-${{ steps.tag.outputs.tag }}-binaries.zip'
+          $zip = "KeePassNatMsg-$tag-binaries.zip"
           7z a $zip .\build\KeePassNatMsg\ "-xr!*.pdb"
           $hash = (Get-FileHash "$zip" sha256).Hash.ToLower()
           Set-Content -Path 'release.txt' -Value ('### SHA256 Hash',('* '+$zip),('  * '+$hash))
@@ -42,9 +46,9 @@ jobs:
           $hash = (Get-FileHash "$plgx" sha256).Hash.ToLower()
           Add-Content -Path 'release.txt' -Value (('* '+$plgx),('  * '+$hash))
       - name: Publish Release
-        uses: softprops/action-gh-release@v0.1.15
+        uses: softprops/action-gh-release@v2
         with:
           body_path: release.txt
           files: |
-            KeePassNatMsg-${{ steps.tag.outputs.tag }}-binaries.zip
+            KeePassNatMsg-${{ github.ref_name }}-binaries.zip
             KeePassNatMsg.plgx

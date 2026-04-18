@@ -32,6 +32,7 @@ namespace KeePassNatMsg
         const string SearchUrlsKey = "KeePassHttp_SearchUrls";
         const string UseKeePassXcSettingsKey = "KeePassNatMsg_UseKpxcSettings";
         private const string UseLegacyHostMatchingKey = "KeePassNatMsg_UseLegacyHostMatching";
+        private const string PasswordGeneratorProfileNameKey = "KeePassNatMsg_PasswordGeneratorProfileName";
 
 		public ConfigOpt(AceCustomConfig config)
         {
@@ -162,6 +163,12 @@ namespace KeePassNatMsg
         {
             get { return _config.GetBool(UseLegacyHostMatchingKey, false); }
             set { _config.SetBool(UseLegacyHostMatchingKey, value); }
+        }
+
+        public string PasswordGeneratorProfileName
+        {
+            get { return _config.GetString(PasswordGeneratorProfileNameKey, string.Empty); }
+            set { _config.SetString(PasswordGeneratorProfileNameKey, value); }
         }
     }
 }

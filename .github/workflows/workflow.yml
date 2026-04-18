@@ -9,13 +9,15 @@ on:
 
 jobs:
   build:
-    runs-on: windows-2019
+    runs-on: windows-2022
     steps:
       - name: Checkout
         uses: actions/checkout@v4
       - id: dlkp
         name: Download Keepass
         uses: smorks/keepass-download-action@v0.0.5
+      - name: Setup NuGet
+        uses: NuGet/setup-nuget@v2
       - name: Add msbuild to PATH
         uses: microsoft/setup-msbuild@v2
       - name: Extract KeePass and Build
@@ -23,4 +25,5 @@ jobs:
         run: |
           mkdir build
           7z x -o"build" ${{ steps.dlkp.outputs.filename }} KeePass.exe
+          nuget restore KeePassNatMsg.sln
           msbuild /p:Configuration=Release

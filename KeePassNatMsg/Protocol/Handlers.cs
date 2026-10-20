@@ -6,6 +6,7 @@ using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Windows.Forms;
 
 namespace KeePassNatMsg.Protocol
 {
@@ -15,6 +16,7 @@ namespace KeePassNatMsg.Protocol
         private Dictionary<string, RequestHandler> _handlers;
         private IPluginHost _host;
         private object _unlockLock;
+		private bool _bringToFrontRequested;
 
         public delegate Response RequestHandler(Request req);
 
@@ -62,10 +64,34 @@ namespace KeePassNatMsg.Protocol
         {
             lock (_unlockLock)
             {
-                var config = new ConfigOpt(_host.CustomConfig);
-                if (!_host.Database.IsOpen && config.UnlockDatabaseRequest && KeePass.UI.GlobalWindowManager.WindowCount == 0 && triggerUnlock)
+                if (_host.Database.IsOpen)
+				{
+					_bringToFrontRequested = false; // the database is open, the request has been completed
+					return true;
+				}
+				var config = new ConfigOpt(_host.CustomConfig);
+                if (config.UnlockDatabaseRequest && triggerUnlock)
                 {
-                    _host.MainWindow.Invoke(new System.Action(() => _host.MainWindow.OpenDatabase(_host.MainWindow.DocumentManager.ActiveDocument.LockedIoc, null, false)));
+                    _host.MainWindow.Invoke(new System.Action(() =>
+					{
+						if (KeePass.UI.GlobalWindowManager.WindowCount == 0)
+						{
+							// No dialog open yet for this database — start a fresh one.
+							_bringToFrontRequested = true;
+							_host.MainWindow.OpenDatabase(_host.MainWindow.DocumentManager.ActiveDocument.LockedIoc, null, false);
+							_bringToFrontRequested = false;
+						}
+						else
+						{
+							// A dialog (likely the master-key prompt from an earlier
+							// triggerUnlock, or KeePass's own auto-lock prompt) may
+							// already be open but hidden behind other windows.
+							// Bring KeePass to the foreground so the user actually
+							// sees it, instead of silently doing nothing.
+							_bringToFrontRequested = true;
+							BringKeePassWindowToFront(_host.MainWindow);
+						}
+					}));
                 }
 
                 return _host.Database.IsOpen;
@@ -292,5 +318,22 @@ namespace KeePassNatMsg.Protocol
 
             return resp;
         }
+		
+		static void BringKeePassWindowToFront(Form f)
+		{
+			if (f == null || f.IsDisposed) return;
+
+			if (!f.Visible) f.Show();
+			if (f.WindowState == FormWindowState.Minimized)
+				f.WindowState = FormWindowState.Normal;
+
+			// TopMost-switching raises the window in Z-order on most window managers
+			bool wasTop = f.TopMost;
+			f.TopMost = true;
+			f.TopMost = wasTop;
+
+			f.BringToFront();
+			f.Activate();
+		}
     }
 }
